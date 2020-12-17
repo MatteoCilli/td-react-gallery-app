@@ -10,27 +10,27 @@ import axios from "axios";
 export default class App extends Component {
   // each link has their own state
   state = {
-    planes: [],
-    trains: [],
-    automobiles: [],
+    a320: [],
+    lufthansa: [],
+    efa: [],
     search: []
 }
   // each link has own method for making API call
   componentDidMount() {
-    this.searchPlanes();
-    this.searchTrains();
-    this.searchAutomobiles();
+    this.searchA320();
+    this.searchLufthansa();
+    this.searchEFA();
     this.searchPhotos();
   }
 
-  searchPlanes = (query = "A320") => {
+  searchA320 = (query = "A320") => {
     axios
       .get(
         `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`
       )
       .then((response) => {
         this.setState({
-          planes: response.data.photos.photo,
+          a320: response.data.photos.photo,
         });
       })
       .catch((error) => {
@@ -38,14 +38,14 @@ export default class App extends Component {
       });
   };
 
-  searchTrains = (query = "deutsche-lufthansa") => {
+  searchLufthansa = (query = "deutsche-lufthansa") => {
     axios
       .get(
         `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`
       )
       .then((response) => {
         this.setState({
-          trains: response.data.photos.photo,
+          lufthansa: response.data.photos.photo,
         });
       })
       .catch((error) => {
@@ -53,14 +53,14 @@ export default class App extends Component {
       });
   };
 
-  searchAutomobiles = (query = "european-flight-academy") => {
+  searchEFA = (query = "european-flight-academy") => {
     axios
       .get(
         `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`
       )
       .then((response) => {
         this.setState({
-          automobiles: response.data.photos.photo,
+          efa: response.data.photos.photo,
         });
       })
       .catch((error) => {
@@ -91,18 +91,18 @@ export default class App extends Component {
           <Nav />
 
           <Switch>
-            <Route exact path="/" render={() => <Redirect to="/planes" />} />
+            <Route exact path="/" render={() => <Redirect to="/a320" />} />
             <Route
-              path="/planes"
-              render={() => <PhotoContainer data={this.state.planes} />}
+              path="/a320"
+              render={() => <PhotoContainer data={this.state.a320} />}
             />
             <Route
-              path="/trains"
-              render={() => <PhotoContainer data={this.state.trains} />}
+              path="/lufthansa"
+              render={() => <PhotoContainer data={this.state.lufthansa} />}
             />
             <Route
-              path="/automobiles"
-              render={() => <PhotoContainer data={this.state.automobiles} />}
+              path="/efa"
+              render={() => <PhotoContainer data={this.state.efa} />}
             />
               <Route
               exact path="/search/:query" 

@@ -6,13 +6,13 @@ function Nav() {
     <nav className="main-nav">
         <ul>
             <li>
-                <NavLink to="/planes">Planes</NavLink>
+                <NavLink to="/a320">A320</NavLink>
             </li>
             <li>
-                <NavLink to="/trains">Trains</NavLink>
+                <NavLink to="/lufthansa">Lufthansa</NavLink>
             </li>
             <li>
-                <NavLink to="/automobiles">Automobiles</NavLink>
+                <NavLink to="/efa">EFA</NavLink>
             </li>
         </ul>
     </nav>
