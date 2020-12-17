@@ -8,18 +8,65 @@ import axios from "axios";
 
 
 export default class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      photos: [{ planes: [], trains: [], automobiles: [] }],
-    };
+  // each link has their own state
+  state = {
+    planes: [],
+    trains: [],
+    automobiles: [],
+    search: []
+}
+  // each link has own method for making API call
+  componentDidMount() {
+    this.searchPlanes();
+    this.searchTrains();
+    this.searchAutomobiles();
+    this.searchPhotos();
   }
 
-  componentDidMount() {
-    this.searchPhotos((this.query = "planes"));
-    this.searchPhotos((this.query = "trains"));
-    this.searchPhotos((this.query = "automobiles"));
-  }
+  searchPlanes = (query = "A320") => {
+    axios
+      .get(
+        `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`
+      )
+      .then((response) => {
+        this.setState({
+          planes: response.data.photos.photo,
+        });
+      })
+      .catch((error) => {
+        console.log("Error fetching and parsing data", error);
+      });
+  };
+
+  searchTrains = (query = "deutsche-lufthansa") => {
+    axios
+      .get(
+        `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`
+      )
+      .then((response) => {
+        this.setState({
+          trains: response.data.photos.photo,
+        });
+      })
+      .catch((error) => {
+        console.log("Error fetching and parsing data", error);
+      });
+  };
+
+  searchAutomobiles = (query = "european-flight-academy") => {
+    axios
+      .get(
+        `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`
+      )
+      .then((response) => {
+        this.setState({
+          automobiles: response.data.photos.photo,
+        });
+      })
+      .catch((error) => {
+        console.log("Error fetching and parsing data", error);
+      });
+  };
 
   searchPhotos = (query) => {
     axios
@@ -28,7 +75,7 @@ export default class App extends Component {
       )
       .then((response) => {
         this.setState({
-          photos: response.data.photos.photo,
+          search: response.data.photos.photo,
         });
       })
       .catch((error) => {
@@ -36,32 +83,35 @@ export default class App extends Component {
       });
   };
 
-
   render() {
-    console.log(this.state.photos);
-    return(
+    return (
       <BrowserRouter>
-      <div className="container">
-          <Search search={this.searchPhotos} />
+        <div className="container">
+        <Search search={this.searchPhotos}/>
+          <Nav />
+
           <Switch>
-            <Nav />
             <Route exact path="/" render={() => <Redirect to="/planes" />} />
             <Route
               path="/planes"
-              render={() => <PhotoContainer data={this.photos.planes} />}
+              render={() => <PhotoContainer data={this.state.planes} />}
             />
             <Route
               path="/trains"
-              render={() => <PhotoContainer data={this.photos.trains} />}
+              render={() => <PhotoContainer data={this.state.trains} />}
             />
             <Route
               path="/automobiles"
-              render={() => <PhotoContainer data={this.photos.automobiles} />}
+              render={() => <PhotoContainer data={this.state.automobiles} />}
             />
+              <Route
+              exact path="/search/:query" 
+              render={() => <PhotoContainer data={this.state.search} />}
+            />
+            
           </Switch>
-          <PhotoContainer data={this.state.photos} />
         </div>
       </BrowserRouter>
     );
-  };
-};
+  }
+}
